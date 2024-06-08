@@ -49,7 +49,7 @@ public class UriBuilderServiceImpl implements UriBuilderService {
 
         return allOAuth2Infos.getFirst().oAuth2Apps().getAuthTokenUrl() + "?"
                 + ProjectConstants.YOUTUBE_PARAMETER_SCOPE_NAME
-                + "=" + allOAuth2Infos.getFirst().scope().getScopeName() + "&"
+                + "=" + getSpotifyScope(allOAuth2Infos) + "&"
                 + ProjectConstants.YOUTUBE_PARAMETER_RESPONSE_TYPE_NAME
                 + "=" + ProjectConstants.YOUTUBE_RESPONSE_TYPE_VALUE + "&"
                 + ProjectConstants.YOUTUBE_PARAMETER_CLIENT_ID_NAME
@@ -58,5 +58,14 @@ public class UriBuilderServiceImpl implements UriBuilderService {
                 + "=" + allOAuth2Infos.getFirst().redirectUri().getRedirectUri() + "&"
                 + ProjectConstants.YOUTUBE_PARAMETER_ACCESS_TYPE_NAME
                 + "=" + ProjectConstants.YOUTUBE_ACCESS_TYPE_VALUE;
+    }
+
+    @Override
+    public String getYoutubeScope(List<AllOAuth2Info> allOAuth2Infos) {
+        return allOAuth2Infos.stream()
+                .map(AllOAuth2Info::scope)
+                .map(Scope::getScopeName)
+                .distinct()
+                .collect(Collectors.joining(" "));
     }
 }

@@ -67,16 +67,17 @@ public class ProjectConstants {
     public static final String YOUTUBE_BODY_CLIENT_SECRET_KEY = "client_secret";
     public static final String YOUTUBE_BODY_CODE_KEY = "code";
     public static final String YOUTUBE_BODY_REDIRECT_URI_KEY = "redirect_uri";
+    public static final String YOUTUBE_BODY_REFRESH_TOKEN_KEY = "refresh_token";
+
+    //----------------- Youtube Endpoints --------------------//
+    public static final String GOOGLE_BASE_URI = "https://www.googleapis.com/oauth2/v1";
+    public static final String GOOGLE_GET_USER_INFO_ENDPOINT = "/userinfo";
+
+
 
     //------------------ User Role --------------------------//
     public static final String USER_ROLE = "ROLE_USER";
 
     //----------------- Current Time --------------------------//
     public static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
-
-
-
-
-
-
 }

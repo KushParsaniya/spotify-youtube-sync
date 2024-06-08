@@ -13,4 +13,7 @@ public interface UriBuilderService {
     String getSpotifyScope(List<AllOAuth2Info> allOAuth2Infos);
 
     String getYoutubeUri();
+
+    String getYoutubeScope(List<AllOAuth2Info> allOAuth2Infos);
+
 }
