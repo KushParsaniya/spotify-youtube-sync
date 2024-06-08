@@ -35,9 +35,9 @@ public class YoutubeOAuth2ServiceImpl implements YoutubeOAuth2Service {
     private final OAuth2Service oAuth2Service;
 
     private final RestTemplate restTemplate;
-    
+
     private final UserRepository userRepository;
-    
+
     private final UserTokenRepository userTokenRepository;
 
     private final UserMapper userMapper;
@@ -105,7 +105,7 @@ public class YoutubeOAuth2ServiceImpl implements YoutubeOAuth2Service {
                 + " " + youtubeAccessTokenSuccessResponse.accessToken());
 
 
-        HttpEntity<MultiValueMap<String,String>> request = new HttpEntity<>(headers);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(headers);
 
         ResponseEntity<YoutubeUserInfoResponse> responseEntity = restTemplate.exchange(uri, HttpMethod.GET,
                 request, YoutubeUserInfoResponse.class);

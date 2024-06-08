@@ -25,7 +25,7 @@ public class ProjectConstants {
     public static final String SPOTIFY_PARAMETER_SCOPE_NAME = "scope";
 
     //----------------- Spotify Parameter Values -------------------//
-    public static final String SPOTIFY_RESPONSE_TYPE_VALUE="code";
+    public static final String SPOTIFY_RESPONSE_TYPE_VALUE = "code";
 
 
     //----------------- Shopify Scopes ------------------------//
@@ -72,7 +72,6 @@ public class ProjectConstants {
     //----------------- Youtube Endpoints --------------------//
     public static final String GOOGLE_BASE_URI = "https://www.googleapis.com/oauth2/v1";
     public static final String GOOGLE_GET_USER_INFO_ENDPOINT = "/userinfo";
-
 
 
     //------------------ User Role --------------------------//

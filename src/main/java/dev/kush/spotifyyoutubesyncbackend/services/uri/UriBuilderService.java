@@ -1,7 +1,6 @@
 package dev.kush.spotifyyoutubesyncbackend.services.uri;
 
 
-
 import dev.kush.spotifyyoutubesyncbackend.dtos.AllOAuth2Info;
 
 import java.util.List;

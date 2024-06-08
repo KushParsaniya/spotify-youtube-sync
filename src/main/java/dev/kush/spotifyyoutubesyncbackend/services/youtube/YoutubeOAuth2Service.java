@@ -2,7 +2,6 @@ package dev.kush.spotifyyoutubesyncbackend.services.youtube;
 
 
 import dev.kush.spotifyyoutubesyncbackend.dtos.AllOAuth2Info;
-import dev.kush.spotifyyoutubesyncbackend.dtos.spotify.SpotifyAccessTokenSuccessResponse;
 import dev.kush.spotifyyoutubesyncbackend.dtos.youtube.YoutubeAccessTokenSuccessResponse;
 import dev.kush.spotifyyoutubesyncbackend.dtos.youtube.YoutubeUserDto;
 import dev.kush.spotifyyoutubesyncbackend.dtos.youtube.YoutubeUserInfoResponse;
@@ -29,7 +28,6 @@ public interface YoutubeOAuth2Service {
     UserToken refreshToken(UserToken userToken);
 
     ResponseEntity<YoutubeAccessTokenSuccessResponse> refreshTokenRestCall(UserToken userToken, AllOAuth2Info allOAuth2Info);
-
 
 
 }
