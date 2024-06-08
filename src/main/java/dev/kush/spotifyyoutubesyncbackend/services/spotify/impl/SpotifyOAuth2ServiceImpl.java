@@ -154,7 +154,7 @@ public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
         ResponseEntity<SpotifyUserinfoResponse> response = restTemplate
                 .exchange(uri, HttpMethod.GET, request, SpotifyUserinfoResponse.class);
 
-        if (response.getStatusCode().value() == 200) {
+        if (response.getStatusCode().is2xxSuccessful()) {
             return saveUserName(Objects.requireNonNull(response.getBody()), spotifyAccessTokenSuccessResponse);
         }
         return null;
@@ -169,11 +169,13 @@ public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
         User user = null;
         // if user doesn't exist in DB than create one
         if (optionalUser.isEmpty()) {
+            AllOAuth2Info allOAuth2Info = getAllOAuth2Info();
             user = new User();
             user.setUsername(spotifyUserinfoResponse.email());
             user.setSpotifyUserId(spotifyUserinfoResponse.id());
             user.setRole(ProjectConstants.USER_ROLE);
             user.setCreatedAt(DateUtils.getCurrentDateTime());
+            user.setOAuth2Apps(allOAuth2Info.oAuth2Apps());
         } else {
             user = optionalUser.get();
             user.setSpotifyUserId(spotifyUserinfoResponse.id());
@@ -191,7 +193,7 @@ public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
 
     @Override
     public UserToken refreshToken(UserToken userToken) {
-        AllOAuth2Info allOAuth2Info = oAuth2Service.getAllInfoFromAppName(ProjectConstants.SPOTIFY_APP_NAME).get(1);
+        AllOAuth2Info allOAuth2Info = getAllOAuth2Info();
 
         if (allOAuth2Info == null) {
             // TODO: handle error
@@ -205,6 +207,10 @@ public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
             return saveAccessTokenOfUser(spotifyAccessTokenSuccessResponse, allOAuth2Info.oAuth2Apps(), userToken.getUser());
         }
         return null;
+    }
+
+    private AllOAuth2Info getAllOAuth2Info() {
+        return oAuth2Service.getAllInfoFromAppName(ProjectConstants.SPOTIFY_APP_NAME).get(1);
     }
 
     @Override

@@ -31,11 +31,11 @@ public class UriBuilderServiceImpl implements UriBuilderService {
                 + ProjectConstants.SPOTIFY_PARAMETER_REDIRECT_URI_NAME +
                 "=" + allOAuth2Infos.getFirst().redirectUri().getRedirectUri() + "&"
                 + ProjectConstants.SPOTIFY_PARAMETER_SCOPE_NAME + "="
-                + getSpotifyScope(allOAuth2Infos);
+                + getScope(allOAuth2Infos);
     }
 
     @Override
-    public String getSpotifyScope(List<AllOAuth2Info> allOAuth2Infos) {
+    public String getScope(List<AllOAuth2Info> allOAuth2Infos) {
         return allOAuth2Infos.stream()
                 .map(AllOAuth2Info::scope)
                 .map(Scope::getScopeName)
@@ -49,7 +49,7 @@ public class UriBuilderServiceImpl implements UriBuilderService {
 
         return allOAuth2Infos.getFirst().oAuth2Apps().getAuthTokenUrl() + "?"
                 + ProjectConstants.YOUTUBE_PARAMETER_SCOPE_NAME
-                + "=" + allOAuth2Infos.getFirst().scope().getScopeName() + "&"
+                + "=" + getScope(allOAuth2Infos) + "&"
                 + ProjectConstants.YOUTUBE_PARAMETER_RESPONSE_TYPE_NAME
                 + "=" + ProjectConstants.YOUTUBE_RESPONSE_TYPE_VALUE + "&"
                 + ProjectConstants.YOUTUBE_PARAMETER_CLIENT_ID_NAME
@@ -59,4 +59,5 @@ public class UriBuilderServiceImpl implements UriBuilderService {
                 + ProjectConstants.YOUTUBE_PARAMETER_ACCESS_TYPE_NAME
                 + "=" + ProjectConstants.YOUTUBE_ACCESS_TYPE_VALUE;
     }
+
 }
