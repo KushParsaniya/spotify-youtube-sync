@@ -1,0 +1,9 @@
+spring:
+  jpa:
+    show-sql: true
+
+  cache:
+    caffeine:
+      spec: maximumSize=500,expireAfterAccess=600s
+server:
+  port: 8070
