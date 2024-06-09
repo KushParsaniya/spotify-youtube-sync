@@ -188,7 +188,7 @@ public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
 
     @Override
     public boolean isTokenExpired(UserToken userToken) {
-        return userToken.getExpiryAt().isAfter(DateUtils.getCurrentDateTime());
+        return userToken.getExpiryAt().isBefore(DateUtils.getCurrentDateTime());
     }
 
     @Override
@@ -216,6 +216,7 @@ public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
     @Override
     public ResponseEntity<SpotifyAccessTokenSuccessResponse> refreshTokenRestCall(UserToken userToken, AllOAuth2Info allOAuth2Info) {
         HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", userToken.getTokenType() + " " + userToken.getAccessToken());
         headers.add("Content-Type", "application/x-www-form-urlencoded");
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();

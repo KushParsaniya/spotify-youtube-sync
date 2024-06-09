@@ -172,7 +172,7 @@ public class YoutubeOAuth2ServiceImpl implements YoutubeOAuth2Service {
 
     @Override
     public boolean isTokenExpired(UserToken userToken) {
-        return userToken.getExpiryAt().isAfter(DateUtils.getCurrentDateTime());
+        return userToken.getExpiryAt().isBefore(DateUtils.getCurrentDateTime());
     }
 
     @Override

@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Set;
 
 public interface SpotifyService {
-    SpotifyCreatePlayListSuccess createPlayList(String userId, CreatePlayListBody addPlayListBody);
+    SpotifyCreatePlayListSuccess createPlayList(String spotifyUserId, CreatePlayListBody addPlayListBody);
 
-    ResponseEntity<SpotifyCreatePlayListSuccess> createPlayListRestCall(String userId, UserToken userToken, CreatePlayListBody createPlayListBody);
+    ResponseEntity<SpotifyCreatePlayListSuccess> createPlayListRestCall(String spotifyUserId, UserToken userToken, CreatePlayListBody createPlayListBody);
 
-    boolean addTracksToPlaylist(UserToken userToken, SpotifyCreatePlayListSuccess spotifyCreatePlayListSuccess, AddTrackBody addTrackBody);
+    boolean addTracksToPlaylist(String spotifyUserId, SpotifyCreatePlayListSuccess spotifyCreatePlayListSuccess, AddTrackBody addTrackBody);
 
     String searchTrack(UserToken userToken, String trackName);
 
-    Set<String> searchMultipleTracks(UserToken userToken, List<String> trackNames);
+    Set<String> searchMultipleTracks(String spotifyUserId, List<String> trackNames);
 
 }
