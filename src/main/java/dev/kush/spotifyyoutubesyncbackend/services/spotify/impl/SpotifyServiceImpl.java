@@ -5,6 +5,7 @@ import dev.kush.spotifyyoutubesyncbackend.constant.ProjectConstants;
 import dev.kush.spotifyyoutubesyncbackend.dtos.spotify.AddTrackBody;
 import dev.kush.spotifyyoutubesyncbackend.dtos.spotify.CreatePlayListBody;
 import dev.kush.spotifyyoutubesyncbackend.dtos.spotify.SpotifyCreatePlayListSuccess;
+import dev.kush.spotifyyoutubesyncbackend.dtos.spotify.SpotifySearchTrackBodySuccess;
 import dev.kush.spotifyyoutubesyncbackend.entities.UserToken;
 import dev.kush.spotifyyoutubesyncbackend.repos.UserTokenRepository;
 import dev.kush.spotifyyoutubesyncbackend.services.spotify.SpotifyOAuth2Service;
@@ -12,6 +13,7 @@ import dev.kush.spotifyyoutubesyncbackend.services.spotify.SpotifyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -33,23 +36,37 @@ public class SpotifyServiceImpl implements SpotifyService {
     private final SpotifyOAuth2Service spotifyOAuth2Service;
 
 
-    @Override
-    public SpotifyCreatePlayListSuccess createPlayList(String userId, CreatePlayListBody createPlayListBody) {
+    private HttpHeaders createHeaders(UserToken userToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("Authorization", userToken.getTokenType() + " " + userToken.getAccessToken());
+        return headers;
+    }
 
-        Optional<UserToken> optionalUserToken = getUserTokenBySpotifyReactAuthDto(userId);
-
-        if (optionalUserToken.isEmpty()) {
+    private UserToken getUserToken(String spotifyUserId) {
+        if(spotifyUserId == null) {
             return null;
         }
 
-        UserToken userToken = optionalUserToken.get();
+        Optional<UserToken> optionalUserToken = userTokenRepository.findBySpotifyUserId(spotifyUserId);
+        return optionalUserToken.orElse(null);
+    }
+
+    @Override
+    public SpotifyCreatePlayListSuccess createPlayList(String spotifyUserId, CreatePlayListBody createPlayListBody) {
+
+        var userToken = getUserToken(spotifyUserId);
+
+        if (userToken == null) {
+            return null;
+        }
 
         if (spotifyOAuth2Service.isTokenExpired(userToken)) {
             userToken = spotifyOAuth2Service.refreshToken(userToken);
         }
 
 
-        ResponseEntity<SpotifyCreatePlayListSuccess> response = createPlayListRestCall(userId, userToken, createPlayListBody);
+        ResponseEntity<SpotifyCreatePlayListSuccess> response = createPlayListRestCall(spotifyUserId, userToken, createPlayListBody);
 
         if (response.getStatusCode().is2xxSuccessful()) {
             return response.getBody();
@@ -58,14 +75,11 @@ public class SpotifyServiceImpl implements SpotifyService {
     }
 
     @Override
-    public ResponseEntity<SpotifyCreatePlayListSuccess> createPlayListRestCall(String userId, UserToken userToken, CreatePlayListBody createPlayListBody) {
+    public ResponseEntity<SpotifyCreatePlayListSuccess> createPlayListRestCall(String spotifyUserId, UserToken userToken, CreatePlayListBody createPlayListBody) {
         String uri = String.format(ProjectConstants.SPOTIFY_BASE_URI +
-                ProjectConstants.SPOTIFY_CREATE_PLAYLIST_ENDPOINT, userId);
+                ProjectConstants.SPOTIFY_CREATE_PLAYLIST_ENDPOINT, spotifyUserId);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add("Authorization", userToken.getTokenType() + " " +
-                userToken.getAccessToken());
+        HttpHeaders headers = createHeaders(userToken);
 
         HttpEntity<CreatePlayListBody> request = new HttpEntity<>(createPlayListBody, headers);
 
@@ -73,14 +87,18 @@ public class SpotifyServiceImpl implements SpotifyService {
     }
 
     @Override
-    public boolean addTracksToPlaylist(UserToken userToken, SpotifyCreatePlayListSuccess spotifyCreatePlayListSuccess, AddTrackBody addTrackBody) {
+    public boolean addTracksToPlaylist(String spotifyUserId, SpotifyCreatePlayListSuccess spotifyCreatePlayListSuccess, AddTrackBody addTrackBody) {
+
+        var userToken = getUserToken(spotifyUserId);
+
+        if (userToken == null) {
+            return false;
+        }
+
         String uri = String.format(ProjectConstants.SPOTIFY_BASE_URI +
                 ProjectConstants.SPOTIFY_ADD_TRACKS_TO_PLAYLIST_ENDPOINT, spotifyCreatePlayListSuccess.id());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add("Authorization", userToken.getTokenType() + " " +
-                userToken.getAccessToken());
+        HttpHeaders headers = createHeaders(userToken);
 
         HttpEntity<AddTrackBody> request = new HttpEntity<>(addTrackBody, headers);
 
@@ -95,22 +113,26 @@ public class SpotifyServiceImpl implements SpotifyService {
                 + "?q=" + trackName
                 + "&type=track";
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add("Authorization", userToken.getTokenType() + " " + userToken.getAccessToken());
+        HttpHeaders headers = createHeaders(userToken);
 
         HttpEntity<String> request = new HttpEntity<>(headers);
 
-        var response = restTemplate.getForEntity(uri, String.class);
+        var response = restTemplate.exchange(uri, HttpMethod.GET, request, SpotifySearchTrackBodySuccess.class);
 
         if (response.getStatusCode().is2xxSuccessful()) {
-            return response.getBody();
+            return Objects.requireNonNull(response.getBody()).tracks().spotifySearchTrackItems().getFirst().trackId();
         }
         return null;
     }
 
     @Override
-    public Set<String> searchMultipleTracks(UserToken userToken, List<String> trackNames) {
+    public Set<String> searchMultipleTracks(String spotifyUserId, List<String> trackNames) {
+
+        var userToken = getUserToken(spotifyUserId);
+
+        if (spotifyUserId == null) {
+            return Set.of();
+        }
 
         Set<String> trackIds = new HashSet<>();
 
@@ -122,9 +144,5 @@ public class SpotifyServiceImpl implements SpotifyService {
         }
 
         return trackIds;
-    }
-
-    private Optional<UserToken> getUserTokenBySpotifyReactAuthDto(String userId) {
-        return userTokenRepository.findBySpotifyUserNameAndUserId(userId);
     }
 }

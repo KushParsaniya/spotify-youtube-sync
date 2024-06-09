@@ -56,12 +56,12 @@ public class ProjectConstants {
     public static final String YOUTUBE_PARAMETER_SCOPE_NAME = "scope";
     public static final String YOUTUBE_PARAMETER_ACCESS_TYPE_NAME = "access_type";
 
-    //----------------- Youtube Parameter Values -------------------//
+    //----------------- Youtube OAuth2 Parameter Values -------------------//
     public static final String YOUTUBE_RESPONSE_TYPE_VALUE = "code";
     public static final String YOUTUBE_INCLUDE_GRANTED_SCOPE_VALUE = "true";
     public static final String YOUTUBE_ACCESS_TYPE_VALUE = "offline";
 
-    //--------------- Youtube Body Keys ----------------------//
+    //--------------- Youtube OAuth2 Body Keys ----------------------//
     public static final String YOUTUBE_BODY_GRANT_TYPE_KEY = "grant_type";
     public static final String YOUTUBE_BODY_CLIENT_ID_KEY = "client_id";
     public static final String YOUTUBE_BODY_CLIENT_SECRET_KEY = "client_secret";
@@ -72,7 +72,22 @@ public class ProjectConstants {
     //----------------- Youtube Endpoints --------------------//
     public static final String GOOGLE_BASE_URI = "https://www.googleapis.com/oauth2/v1";
     public static final String GOOGLE_GET_USER_INFO_ENDPOINT = "/userinfo";
+    public static final String YOUTUBE_BASE_URI = "https://www.googleapis.com/youtube/v3";
+    public static final String YOUTUBE_LIST_PLAYLISTS_ENDPOINT = "/playlists";
+    public static final String YOUTUBE_LIST_PLAYLIST_ITEMS_ENDPOINT = "/playlistItems";
 
+    //----------------- Youtube Parameter Name -------------------//
+    public static final String YOUTUBE_PARAMETER_PART_NAME = "part";
+    public static final String YOUTUBE_PARAMETER_MINE_NAME = "mine";
+    public static final String YOUTUBE_PARAMETER_ID_NAME = "id";
+    public static final String YOUTUBE_PARAMETER_PLAYLIST_ID_NAME = "playlistId";
+
+
+    //----------------- Youtube Parameter Values -------------------//
+    public static final String YOUTUBE_PART_SNIPPET_VALUE = "snippet";
+    public static final String YOUTUBE_PART_CONTENT_DETAILS_VALUE = "contentDetails";
+    public static final String YOUTUBE_PART_ID_VALUE = "id";
+    public static final String YOUTUBE_PARAMETER_MINE_VALUE = "true";
 
     //------------------ User Role --------------------------//
     public static final String USER_ROLE = "ROLE_USER";
