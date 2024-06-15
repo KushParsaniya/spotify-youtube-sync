@@ -70,7 +70,7 @@ public class YoutubeServiceImpl implements YoutubeService {
         ResponseEntity<YoutubeResponseDto> response = getPlaylistRestCall(url, userToken, youtubeUserId);
 
         if (response.getStatusCode().is2xxSuccessful()) {
-            return Objects.requireNonNull(response.getBody()).youtubeItemsDtos().getFirst();
+            return Objects.requireNonNull(response.getBody()).youtubeItemsDtos().get(0);
         }
         return null;
     }
@@ -96,7 +96,7 @@ public class YoutubeServiceImpl implements YoutubeService {
         ResponseEntity<YoutubeResponseDto> response = getPlaylistRestCall(url, userToken, youtubeUserId);
 
         if (response.getStatusCode().is2xxSuccessful()) {
-            return Objects.requireNonNull(response.getBody()).youtubeItemsDtos().getFirst();
+            return Objects.requireNonNull(response.getBody()).youtubeItemsDtos().get(0);
         }
         return null;
     }

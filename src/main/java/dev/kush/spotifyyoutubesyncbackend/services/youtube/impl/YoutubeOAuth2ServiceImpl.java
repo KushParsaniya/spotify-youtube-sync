@@ -44,7 +44,7 @@ public class YoutubeOAuth2ServiceImpl implements YoutubeOAuth2Service {
 
     @Override
     public YoutubeUserDto getAccessToken(String authCode) {
-        var allOAuth2Info = oAuth2Service.getAllInfoFromAppName(ProjectConstants.YOUTUBE_APP_NAME).getFirst();
+        var allOAuth2Info = oAuth2Service.getAllInfoFromAppName(ProjectConstants.YOUTUBE_APP_NAME).get(0);
 
         if (allOAuth2Info == null) {
             // TODO: Handler Error

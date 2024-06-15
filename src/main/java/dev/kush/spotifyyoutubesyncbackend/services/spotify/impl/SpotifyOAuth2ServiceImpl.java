@@ -51,7 +51,7 @@ public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
     public SpotifyUserDto getAccessToken(String authCode) {
 
         // get Apps and client credentials From DB
-        var allOAuth2Info = oAuth2Service.getAllInfoFromAppName(ProjectConstants.SPOTIFY_APP_NAME).getFirst();
+        var allOAuth2Info = oAuth2Service.getAllInfoFromAppName(ProjectConstants.SPOTIFY_APP_NAME).get(0);
 
         // rest call to spotify for AccessToken
         if (allOAuth2Info == null) {
