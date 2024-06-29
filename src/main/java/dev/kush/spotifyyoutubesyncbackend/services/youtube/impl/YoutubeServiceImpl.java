@@ -43,7 +43,7 @@ public class YoutubeServiceImpl implements YoutubeService {
 
     private UserToken getUserToken(String youtubeUserId) {
 
-        if(youtubeUserId == null) {
+        if (youtubeUserId == null) {
             return null;
         }
         Optional<UserToken> optionalUserToken = userTokenRepository.findByYoutubeUserId(youtubeUserId);

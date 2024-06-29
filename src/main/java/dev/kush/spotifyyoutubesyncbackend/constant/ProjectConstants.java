@@ -11,7 +11,7 @@ public class ProjectConstants {
     public static final String NO_SPOTIFY_CLIENT_ACCOUNT_MESSAGE = "No Spotify client Account";
 
     //--------------- View Name --------------------------//
-    public static final String INDEX_VIEW_NAME = "index";
+    public static final String INDEX_VIEW_NAME = "home";
 
     //-----------------  OAuth2 Apps -----------------//
     public static final String SPOTIFY_APP_NAME = "spotify";

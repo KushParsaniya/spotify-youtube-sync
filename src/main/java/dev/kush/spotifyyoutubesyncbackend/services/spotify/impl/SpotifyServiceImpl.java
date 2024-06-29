@@ -44,7 +44,7 @@ public class SpotifyServiceImpl implements SpotifyService {
     }
 
     private UserToken getUserToken(String spotifyUserId) {
-        if(spotifyUserId == null) {
+        if (spotifyUserId == null) {
             return null;
         }
 
