@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class UriParamExtractorImpl implements UriParamExtractor {
 
     @Override
-    public String extractPlayListIdFromPlaylistLink(String link)  {
+    public String extractPlayListIdFromPlaylistLink(String link) {
         URI uri = null;
         try {
             uri = new URI(link);

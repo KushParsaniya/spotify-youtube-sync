@@ -6,3 +6,6 @@ spring:
   docker:
     compose:
       enabled: false
+  cache:
+    caffeine:
+      spec: maximumSize=500,expireAfterAccess=600s
