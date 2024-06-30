@@ -91,7 +91,4 @@ public class ProjectConstants {
 
     //------------------ User Role --------------------------//
     public static final String USER_ROLE = "ROLE_USER";
-
-    //----------------- Current Time --------------------------//
-    public static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
 }

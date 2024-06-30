@@ -16,7 +16,6 @@ import dev.kush.spotifyyoutubesyncbackend.repos.UserTokenRepository;
 import dev.kush.spotifyyoutubesyncbackend.services.oauth2.OAuth2Service;
 import dev.kush.spotifyyoutubesyncbackend.services.spotify.SpotifyOAuth2Service;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -33,7 +32,6 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
 
     private final RestTemplate restTemplate;
@@ -51,7 +49,7 @@ public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
     public SpotifyUserDto getAccessToken(String authCode) {
 
         // get Apps and client credentials From DB
-        var allOAuth2Info = oAuth2Service.getAllInfoFromAppName(ProjectConstants.SPOTIFY_APP_NAME).get(0);
+        var allOAuth2Info = oAuth2Service.getAllInfoFromAppName(ProjectConstants.SPOTIFY_APP_NAME).getFirst();
 
         // rest call to spotify for AccessToken
         if (allOAuth2Info == null) {
@@ -210,7 +208,7 @@ public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
     }
 
     private AllOAuth2Info getAllOAuth2Info() {
-        return oAuth2Service.getAllInfoFromAppName(ProjectConstants.SPOTIFY_APP_NAME).get(1);
+        return oAuth2Service.getAllInfoFromAppName(ProjectConstants.SPOTIFY_APP_NAME).getFirst();
     }
 
     @Override

@@ -23,13 +23,13 @@ public class UriBuilderServiceImpl implements UriBuilderService {
     public String getSpotifyUri() {
         var allOAuth2Infos = oAuth2Service.getAllInfoFromAppName(ProjectConstants.SPOTIFY_APP_NAME);
 
-        return allOAuth2Infos.get(0).oAuth2Apps().getAuthTokenUrl() + "?"
+        return allOAuth2Infos.getFirst().oAuth2Apps().getAuthTokenUrl() + "?"
                 + ProjectConstants.SPOTIFY_PARAMETER_RESPONSE_TYPE_NAME
                 + "=" + ProjectConstants.SPOTIFY_RESPONSE_TYPE_VALUE + "&"
                 + ProjectConstants.SPOTIFY_PARAMETER_CLIENT_ID_NAME
-                + "=" + allOAuth2Infos.get(0).client().getClientId() + "&"
+                + "=" + allOAuth2Infos.getFirst().client().getClientId() + "&"
                 + ProjectConstants.SPOTIFY_PARAMETER_REDIRECT_URI_NAME +
-                "=" + allOAuth2Infos.get(0).redirectUri().getRedirectUri() + "&"
+                "=" + allOAuth2Infos.getFirst().redirectUri().getRedirectUri() + "&"
                 + ProjectConstants.SPOTIFY_PARAMETER_SCOPE_NAME + "="
                 + getScope(allOAuth2Infos);
     }
