@@ -44,7 +44,7 @@ public class SpotifyServiceImpl implements SpotifyService {
     }
 
     private UserToken getUserToken(String spotifyUserId) {
-        if(spotifyUserId == null) {
+        if (spotifyUserId == null) {
             return null;
         }
 
@@ -120,7 +120,7 @@ public class SpotifyServiceImpl implements SpotifyService {
         var response = restTemplate.exchange(uri, HttpMethod.GET, request, SpotifySearchTrackBodySuccess.class);
 
         if (response.getStatusCode().is2xxSuccessful()) {
-            return Objects.requireNonNull(response.getBody()).tracks().spotifySearchTrackItems().getFirst().trackId();
+            return Objects.requireNonNull(response.getBody()).tracks().spotifySearchTrackItems().get(0).trackId();
         }
         return null;
     }

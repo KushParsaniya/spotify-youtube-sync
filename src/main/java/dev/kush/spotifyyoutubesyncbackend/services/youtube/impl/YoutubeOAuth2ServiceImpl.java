@@ -194,7 +194,7 @@ public class YoutubeOAuth2ServiceImpl implements YoutubeOAuth2Service {
     }
 
     private AllOAuth2Info getAllOAuth2Info() {
-        return oAuth2Service.getAllInfoFromAppName(ProjectConstants.YOUTUBE_APP_NAME).get(1);
+        return oAuth2Service.getAllInfoFromAppName(ProjectConstants.YOUTUBE_APP_NAME).getFirst();
     }
 
     @Override

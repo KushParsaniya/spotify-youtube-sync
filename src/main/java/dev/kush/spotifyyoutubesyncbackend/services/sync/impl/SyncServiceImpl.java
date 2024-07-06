@@ -25,7 +25,7 @@ public class SyncServiceImpl implements SyncService {
         YoutubeItemsDto youtubePlaylist = youtubeService.getPlaylist(youtubeUserId);
         List<YoutubeItemsDto> playlistItems = getPlaylistItems(youtubePlaylist, youtubeUserId);
 
-        if(playlistItems.isEmpty()) {
+        if (playlistItems.isEmpty()) {
             return false;
         }
 
@@ -37,10 +37,10 @@ public class SyncServiceImpl implements SyncService {
 
     @Override
     public boolean syncYoutubePlayListToSpotifyByPlayListLink(String spotifyUserId, String youtubeUserId, String link) {
-        YoutubeItemsDto youtubePlaylist = youtubeService.getPlaylistByPlaylistLink(youtubeUserId,link);
+        YoutubeItemsDto youtubePlaylist = youtubeService.getPlaylistByPlaylistLink(youtubeUserId, link);
         List<YoutubeItemsDto> playlistItems = getPlaylistItems(youtubePlaylist, youtubeUserId);
 
-        if(playlistItems.isEmpty()) {
+        if (playlistItems.isEmpty()) {
             return false;
         }
 
@@ -53,7 +53,6 @@ public class SyncServiceImpl implements SyncService {
     private List<YoutubeItemsDto> getPlaylistItems(YoutubeItemsDto youtubePlaylist, String youtubeUserId) {
         return youtubeService.getPlaylistItems(youtubePlaylist.id(), youtubeUserId);
     }
-
 
 
     private SpotifyCreatePlayListSuccess createSpotifyPlaylist(String spotifyUserId, YoutubeItemsDto youtubePlaylist) {
