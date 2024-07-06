@@ -13,8 +13,9 @@ public class CacheConfig {
 
     private final CacheManager cacheManager;
 
-    @Scheduled(fixedRate = 60000)
-    public void clearOAuth2InfoCache() {
-        Objects.requireNonNull(cacheManager.getCache("oAuth2Info")).clear();
+    @Scheduled(fixedRate = 150000)
+    public void clearAllCache() {
+        cacheManager.getCacheNames().forEach(cacheName ->
+                Objects.requireNonNull(cacheManager.getCache(cacheName)).clear());
     }
 }
