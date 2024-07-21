@@ -15,6 +15,8 @@ import dev.kush.spotifyyoutubesyncbackend.repos.UserRepository;
 import dev.kush.spotifyyoutubesyncbackend.repos.UserTokenRepository;
 import dev.kush.spotifyyoutubesyncbackend.services.oauth2.OAuth2Service;
 import dev.kush.spotifyyoutubesyncbackend.services.spotify.SpotifyOAuth2Service;
+import dev.kush.spotifyyoutubesyncbackend.services.uri.UriBuilderService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -44,9 +46,11 @@ public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
 
     private final OAuth2Service oAuth2Service;
 
+    private final UriBuilderService uriBuilderService;
+
 
     @Override
-    public SpotifyUserDto getAccessToken(String authCode) {
+    public SpotifyUserDto getAccessToken(HttpServletRequest request, String authCode) {
 
         // get Apps and client credentials From DB
         var allOAuth2Info = oAuth2Service.getAllInfoFromAppName(ProjectConstants.SPOTIFY_APP_NAME).getFirst();
@@ -57,7 +61,7 @@ public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
             throw new RuntimeException("SpotifyOAuth2ServiceImpl :: getAccessToken --> allOAuth2Info is null");
         }
 
-        ResponseEntity<SpotifyAccessTokenSuccessResponse> responseEntity = getAccessTokenRestCall(authCode, allOAuth2Info);
+        ResponseEntity<SpotifyAccessTokenSuccessResponse> responseEntity = getAccessTokenRestCall(request, authCode, allOAuth2Info);
 
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             SpotifyAccessTokenSuccessResponse spotifyAccessTokenSuccessResponse =
@@ -78,29 +82,29 @@ public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
     }
 
     @Override
-    public ResponseEntity<SpotifyAccessTokenSuccessResponse> getAccessTokenRestCall(String authCode, AllOAuth2Info allOAuth2Info) {
+    public ResponseEntity<SpotifyAccessTokenSuccessResponse> getAccessTokenRestCall(HttpServletRequest request, String authCode, AllOAuth2Info allOAuth2Info) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/x-www-form-urlencoded");
 
-        MultiValueMap<String, String> body = getStringStringMultiValueMap(authCode, allOAuth2Info);
+        MultiValueMap<String, String> body = getStringStringMultiValueMap(request, authCode, allOAuth2Info);
 
         String authHeader = Base64.getEncoder().encodeToString((allOAuth2Info.client().getClientId()
                 + ":" + allOAuth2Info.client().getClientSecret()).getBytes());
 
         headers.set("Authorization", "Basic " + authHeader);
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+        HttpEntity<MultiValueMap<String, String>> requestDetails = new HttpEntity<>(body, headers);
 
         return restTemplate.postForEntity(allOAuth2Info.oAuth2Apps().getAccessTokenUrl(),
-                request, SpotifyAccessTokenSuccessResponse.class);
+                requestDetails, SpotifyAccessTokenSuccessResponse.class);
 
     }
 
-    private static MultiValueMap<String, String> getStringStringMultiValueMap(String authCode, AllOAuth2Info allOAuth2Info) {
+    private MultiValueMap<String, String> getStringStringMultiValueMap(HttpServletRequest request, String authCode, AllOAuth2Info allOAuth2Info) {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
 
         body.add(ProjectConstants.SPOTIFY_BODY_CODE_KEY, authCode);
-        body.add(ProjectConstants.SPOTIFY_BODY_REDIRECT_URI_KEY, allOAuth2Info.redirectUri().getRedirectUri());
+        body.add(ProjectConstants.SPOTIFY_BODY_REDIRECT_URI_KEY, uriBuilderService.getRedirectUri(request, ProjectConstants.SPOTIFY_APP_NAME));
         body.add(ProjectConstants.SPOTIFY_BODY_GRANT_TYPE_KEY, allOAuth2Info.grantType().getGrantTypeName());
 
         return body;

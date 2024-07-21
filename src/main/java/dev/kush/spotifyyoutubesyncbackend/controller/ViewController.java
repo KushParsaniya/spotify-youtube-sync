@@ -3,6 +3,7 @@ package dev.kush.spotifyyoutubesyncbackend.controller;
 
 import dev.kush.spotifyyoutubesyncbackend.constant.ProjectConstants;
 import dev.kush.spotifyyoutubesyncbackend.services.uri.UriBuilderService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,10 +17,10 @@ public class ViewController {
     private final UriBuilderService uriBuilderService;
 
     @GetMapping
-    public ModelAndView index(HttpSession session) {
+    public ModelAndView index(HttpServletRequest request, HttpSession session) {
         ModelAndView mv = new ModelAndView(ProjectConstants.INDEX_VIEW_NAME);
-        mv.addObject("youtubeAuthUrl", uriBuilderService.getYoutubeUri());
-        mv.addObject("spotifyAuthUrl", uriBuilderService.getSpotifyUri());
+        mv.addObject("youtubeAuthUrl", uriBuilderService.getYoutubeUri(request));
+        mv.addObject("spotifyAuthUrl", uriBuilderService.getSpotifyUri(request));
         return mv;
     }
 }
