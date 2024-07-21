@@ -1,7 +1,5 @@
 package dev.kush.spotifyyoutubesyncbackend.constant;
 
-import java.time.LocalDateTime;
-
 public class ProjectConstants {
 
     //----------------- Message Constants -----------------//
@@ -23,6 +21,10 @@ public class ProjectConstants {
     public static final String SPOTIFY_PARAMETER_REDIRECT_URI_NAME = "redirect_uri";
     public static final String SPOTIFY_PARAMETER_CLIENT_ID_NAME = "client_id";
     public static final String SPOTIFY_PARAMETER_SCOPE_NAME = "scope";
+
+    //---------------- Redirect URI Endpoints -----------------//
+    public static final String REDIRECT_URI_SPOTIFY_ENDPOINT = "/spotify/callback";
+    public static final String REDIRECT_URI_YOUTUBE_ENDPOINT = "/youtube/callback";
 
     //----------------- Spotify Parameter Values -------------------//
     public static final String SPOTIFY_RESPONSE_TYPE_VALUE = "code";

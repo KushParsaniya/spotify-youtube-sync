@@ -4,6 +4,7 @@ import dev.kush.spotifyyoutubesyncbackend.dtos.spotify.CreatePlayListBody;
 import dev.kush.spotifyyoutubesyncbackend.dtos.spotify.SpotifyUserDto;
 import dev.kush.spotifyyoutubesyncbackend.services.spotify.SpotifyOAuth2Service;
 import dev.kush.spotifyyoutubesyncbackend.services.spotify.SpotifyService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,10 +23,10 @@ public class SpotifyViewController {
     private final SpotifyService spotifyService;
 
     @GetMapping("/callback")
-    public String spotifyCallback(HttpSession session, @RequestParam("code") String authCode) {
+    public String spotifyCallback(HttpServletRequest request, HttpSession session, @RequestParam("code") String authCode) {
         session.removeAttribute("syncStatus");
 
-        SpotifyUserDto userDto = spotifyOAuth2Service.getAccessToken(authCode);
+        SpotifyUserDto userDto = spotifyOAuth2Service.getAccessToken(request, authCode);
         if (userDto == null) {
             session.setAttribute("isSpotifyAuth", false);
         } else {

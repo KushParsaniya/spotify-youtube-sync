@@ -6,6 +6,7 @@ import dev.kush.spotifyyoutubesyncbackend.dtos.AllOAuth2Info;
 import dev.kush.spotifyyoutubesyncbackend.entities.Scope;
 import dev.kush.spotifyyoutubesyncbackend.services.oauth2.OAuth2Service;
 import dev.kush.spotifyyoutubesyncbackend.services.uri.UriBuilderService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class UriBuilderServiceImpl implements UriBuilderService {
 
 
     @Override
-    public String getSpotifyUri() {
+    public String getSpotifyUri(HttpServletRequest request) {
         var allOAuth2Infos = oAuth2Service.getAllInfoFromAppName(ProjectConstants.SPOTIFY_APP_NAME);
 
         return allOAuth2Infos.getFirst().oAuth2Apps().getAuthTokenUrl() + "?"
@@ -29,7 +30,7 @@ public class UriBuilderServiceImpl implements UriBuilderService {
                 + ProjectConstants.SPOTIFY_PARAMETER_CLIENT_ID_NAME
                 + "=" + allOAuth2Infos.getFirst().client().getClientId() + "&"
                 + ProjectConstants.SPOTIFY_PARAMETER_REDIRECT_URI_NAME +
-                "=" + allOAuth2Infos.getFirst().redirectUri().getRedirectUri() + "&"
+                "=" + getRedirectUri(request, ProjectConstants.SPOTIFY_APP_NAME) + "&"
                 + ProjectConstants.SPOTIFY_PARAMETER_SCOPE_NAME + "="
                 + getScope(allOAuth2Infos);
     }
@@ -44,20 +45,31 @@ public class UriBuilderServiceImpl implements UriBuilderService {
     }
 
     @Override
-    public String getYoutubeUri() {
+    public String getYoutubeUri(HttpServletRequest request) {
         var allOAuth2Infos = oAuth2Service.getAllInfoFromAppName(ProjectConstants.YOUTUBE_APP_NAME);
 
-        return allOAuth2Infos.get(0).oAuth2Apps().getAuthTokenUrl() + "?"
+        return allOAuth2Infos.getFirst().oAuth2Apps().getAuthTokenUrl() + "?"
                 + ProjectConstants.YOUTUBE_PARAMETER_SCOPE_NAME
                 + "=" + getScope(allOAuth2Infos) + "&"
                 + ProjectConstants.YOUTUBE_PARAMETER_RESPONSE_TYPE_NAME
                 + "=" + ProjectConstants.YOUTUBE_RESPONSE_TYPE_VALUE + "&"
                 + ProjectConstants.YOUTUBE_PARAMETER_CLIENT_ID_NAME
-                + "=" + allOAuth2Infos.get(0).client().getClientId() + "&"
+                + "=" + allOAuth2Infos.getFirst().client().getClientId() + "&"
                 + ProjectConstants.YOUTUBE_PARAMETER_REDIRECT_URI_NAME
-                + "=" + allOAuth2Infos.get(0).redirectUri().getRedirectUri() + "&"
+                + "=" + getRedirectUri(request, ProjectConstants.YOUTUBE_APP_NAME) + "&"
                 + ProjectConstants.YOUTUBE_PARAMETER_ACCESS_TYPE_NAME
                 + "=" + ProjectConstants.YOUTUBE_ACCESS_TYPE_VALUE;
     }
 
+    @Override
+    public String getRedirectUri(HttpServletRequest request, String appName) {
+        StringBuilder uri = new StringBuilder(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort());
+
+        if (appName.equalsIgnoreCase(ProjectConstants.SPOTIFY_APP_NAME)) {
+            uri.append(ProjectConstants.REDIRECT_URI_SPOTIFY_ENDPOINT);
+        } else if (appName.equalsIgnoreCase(ProjectConstants.YOUTUBE_APP_NAME)) {
+            uri.append(ProjectConstants.REDIRECT_URI_YOUTUBE_ENDPOINT);
+        }
+        return uri.toString();
+    }
 }

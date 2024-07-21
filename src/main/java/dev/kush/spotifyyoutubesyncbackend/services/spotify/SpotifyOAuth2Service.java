@@ -8,13 +8,14 @@ import dev.kush.spotifyyoutubesyncbackend.dtos.spotify.SpotifyUserinfoResponse;
 import dev.kush.spotifyyoutubesyncbackend.entities.OAuth2Apps;
 import dev.kush.spotifyyoutubesyncbackend.entities.User;
 import dev.kush.spotifyyoutubesyncbackend.entities.UserToken;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 
 public interface SpotifyOAuth2Service {
 
-    SpotifyUserDto getAccessToken(String authCode);
+    SpotifyUserDto getAccessToken(HttpServletRequest request, String authCode);
 
-    ResponseEntity<SpotifyAccessTokenSuccessResponse> getAccessTokenRestCall(String authCode, AllOAuth2Info allOAuth2Info);
+    ResponseEntity<SpotifyAccessTokenSuccessResponse> getAccessTokenRestCall(HttpServletRequest request, String authCode, AllOAuth2Info allOAuth2Info);
 
     UserToken saveAccessTokenOfUser(SpotifyAccessTokenSuccessResponse spotifyAccessTokenSuccessResponse,
                                     OAuth2Apps oAuth2Apps, User user);

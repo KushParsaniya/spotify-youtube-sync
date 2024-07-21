@@ -13,7 +13,9 @@ import dev.kush.spotifyyoutubesyncbackend.mapper.UserMapper;
 import dev.kush.spotifyyoutubesyncbackend.repos.UserRepository;
 import dev.kush.spotifyyoutubesyncbackend.repos.UserTokenRepository;
 import dev.kush.spotifyyoutubesyncbackend.services.oauth2.OAuth2Service;
+import dev.kush.spotifyyoutubesyncbackend.services.uri.UriBuilderService;
 import dev.kush.spotifyyoutubesyncbackend.services.youtube.YoutubeOAuth2Service;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -42,8 +44,10 @@ public class YoutubeOAuth2ServiceImpl implements YoutubeOAuth2Service {
 
     private final UserMapper userMapper;
 
+    private final UriBuilderService uriBuilderService;
+
     @Override
-    public YoutubeUserDto getAccessToken(String authCode) {
+    public YoutubeUserDto getAccessToken(HttpServletRequest request, String authCode) {
         var allOAuth2Info = oAuth2Service.getAllInfoFromAppName(ProjectConstants.YOUTUBE_APP_NAME).getFirst();
 
         if (allOAuth2Info == null) {
@@ -51,7 +55,7 @@ public class YoutubeOAuth2ServiceImpl implements YoutubeOAuth2Service {
             throw new RuntimeException("YoutubeOAuth2ServiceImpl :: getAccessToken --> allOAuth2Info is null");
         }
 
-        ResponseEntity<YoutubeAccessTokenSuccessResponse> responseEntity = getAccessTokenRestCall(authCode, allOAuth2Info);
+        ResponseEntity<YoutubeAccessTokenSuccessResponse> responseEntity = getAccessTokenRestCall(request, authCode, allOAuth2Info);
 
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             YoutubeAccessTokenSuccessResponse youtubeAccessTokenSuccessResponse =
@@ -72,25 +76,25 @@ public class YoutubeOAuth2ServiceImpl implements YoutubeOAuth2Service {
     }
 
     @Override
-    public ResponseEntity<YoutubeAccessTokenSuccessResponse> getAccessTokenRestCall(String authCode, AllOAuth2Info allOAuth2Info) {
+    public ResponseEntity<YoutubeAccessTokenSuccessResponse> getAccessTokenRestCall(HttpServletRequest request, String authCode, AllOAuth2Info allOAuth2Info) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/x-www-form-urlencoded");
 
-        final MultiValueMap<String, String> body = getStringStringMultiValueMap(authCode, allOAuth2Info);
+        final MultiValueMap<String, String> body = getStringStringMultiValueMap(request, authCode, allOAuth2Info);
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+        HttpEntity<MultiValueMap<String, String>> requestDetails = new HttpEntity<>(body, headers);
 
         return restTemplate.postForEntity(allOAuth2Info.oAuth2Apps().getAccessTokenUrl(),
-                request, YoutubeAccessTokenSuccessResponse.class);
+                requestDetails, YoutubeAccessTokenSuccessResponse.class);
     }
 
-    private static MultiValueMap<String, String> getStringStringMultiValueMap(String authCode, AllOAuth2Info allOAuth2Info) {
+    private MultiValueMap<String, String> getStringStringMultiValueMap(HttpServletRequest request, String authCode, AllOAuth2Info allOAuth2Info) {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
 
         body.add(ProjectConstants.YOUTUBE_BODY_CODE_KEY, authCode);
         body.add(ProjectConstants.YOUTUBE_BODY_CLIENT_ID_KEY, allOAuth2Info.client().getClientId());
         body.add(ProjectConstants.YOUTUBE_BODY_CLIENT_SECRET_KEY, allOAuth2Info.client().getClientSecret());
-        body.add(ProjectConstants.YOUTUBE_BODY_REDIRECT_URI_KEY, allOAuth2Info.redirectUri().getRedirectUri());
+        body.add(ProjectConstants.YOUTUBE_BODY_REDIRECT_URI_KEY, uriBuilderService.getRedirectUri(request, ProjectConstants.YOUTUBE_APP_NAME));
         body.add(ProjectConstants.YOUTUBE_BODY_GRANT_TYPE_KEY, allOAuth2Info.grantType().getGrantTypeName());
         return body;
     }

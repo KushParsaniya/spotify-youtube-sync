@@ -8,13 +8,14 @@ import dev.kush.spotifyyoutubesyncbackend.dtos.youtube.YoutubeUserInfoResponse;
 import dev.kush.spotifyyoutubesyncbackend.entities.OAuth2Apps;
 import dev.kush.spotifyyoutubesyncbackend.entities.User;
 import dev.kush.spotifyyoutubesyncbackend.entities.UserToken;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 
 public interface YoutubeOAuth2Service {
 
-    YoutubeUserDto getAccessToken(String authCode);
+    YoutubeUserDto getAccessToken(HttpServletRequest request, String authCode);
 
-    ResponseEntity<YoutubeAccessTokenSuccessResponse> getAccessTokenRestCall(String authCode, AllOAuth2Info allOAuth2Info);
+    ResponseEntity<YoutubeAccessTokenSuccessResponse> getAccessTokenRestCall(HttpServletRequest request, String authCode, AllOAuth2Info allOAuth2Info);
 
     User getUserNameFromAccessToken(YoutubeAccessTokenSuccessResponse youtubeAccessTokenSuccessResponse);
 
