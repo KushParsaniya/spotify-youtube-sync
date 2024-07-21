@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is a Spring Boot application designed to synchronize a YouTube playlist with a Spotify playlist. It allows users to seamlessly transfer their favorite YouTube playlist tracks to Spotify, enabling easy access to their preferred music across platforms. You can try this on :  [http://eazybackend.me:8080/]
+This project is a Spring Boot application designed to synchronize a YouTube playlist with a Spotify playlist. It allows users to seamlessly transfer their favorite YouTube playlist tracks to Spotify, enabling easy access to their preferred music across platforms. You can try this on :  http://eazybackend.me:8080/
 
 ## Features
 
