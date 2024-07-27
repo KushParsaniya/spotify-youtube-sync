@@ -6,10 +6,12 @@ spring:
   docker:
     compose:
       enabled: false
-  cache:
-    type: redis
   jpa:
     open-in-view: false
+
+# for redis cache and session
+  cache:
+    type: redis
   data:
     redis:
       host: ${REDIS_HOST}
@@ -17,3 +19,9 @@ spring:
       port: ${REDIS_PORT}
       ssl:
         enabled: true
+
+# fro compression
+server:
+  compression:
+    enabled: true
+    mime-types: text/css,text/html,text/javascript,application/json
