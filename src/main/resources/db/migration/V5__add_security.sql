@@ -1,3 +1,6 @@
+alter table users
+    rename to "app_users";
+
 CREATE TABLE users
 (
     username VARCHAR(50)  NOT NULL PRIMARY KEY,
