@@ -1,6 +1,7 @@
 package dev.kush.spotifyyoutubesyncbackend.controller;
 
 import dev.kush.spotifyyoutubesyncbackend.services.youtube.YoutubeOAuth2Service;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,10 +18,10 @@ public class YoutubeViewController {
     private final YoutubeOAuth2Service youtubeOAuth2Service;
 
     @GetMapping("/callback")
-    public String youtubeCallBack(HttpSession session, @RequestParam("code") String authCode) {
+    public String youtubeCallBack(HttpServletRequest request, HttpSession session, @RequestParam("code") String authCode) {
         session.removeAttribute("syncStatus");
 
-        var userDto = youtubeOAuth2Service.getAccessToken(authCode);
+        var userDto = youtubeOAuth2Service.getAccessToken(request, authCode);
         if (userDto == null) {
             session.setAttribute("isYoutubeAuth", false);
         } else {
