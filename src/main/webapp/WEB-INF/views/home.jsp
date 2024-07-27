@@ -14,7 +14,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube and Spotify Integration</title>
+    <title>YouTube to Spotify Sync</title>
+    <link rel="icon" href="https://th.bing.com/th/id/OIG2.z8kD.T2o.DU9xvS8SzAd?pid=ImgGn" type="image/jpeg">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

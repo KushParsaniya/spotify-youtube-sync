@@ -18,6 +18,7 @@ import dev.kush.spotifyyoutubesyncbackend.services.spotify.SpotifyOAuth2Service;
 import dev.kush.spotifyyoutubesyncbackend.services.uri.UriBuilderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -34,6 +35,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
 
     private final RestTemplate restTemplate;
@@ -57,7 +59,7 @@ public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
 
         // rest call to spotify for AccessToken
         if (allOAuth2Info == null) {
-            // TODO: handle error
+            log.error("SpotifyOAuth2ServiceImpl :: getAccessToken --> allOAuth2Info is null");
             throw new RuntimeException("SpotifyOAuth2ServiceImpl :: getAccessToken --> allOAuth2Info is null");
         }
 
@@ -70,7 +72,7 @@ public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
             User user = getUserNameFromAccessToken(spotifyAccessTokenSuccessResponse);
 
             if (user == null) {
-                // TODO: handle error
+                log.error("SpotifyOAuth2ServiceImpl :: getAccessToken --> user is null");
                 throw new RuntimeException("SpotifyOAuth2ServiceImpl :: getAccessToken --> user is null");
             }
 
@@ -198,7 +200,7 @@ public class SpotifyOAuth2ServiceImpl implements SpotifyOAuth2Service {
         AllOAuth2Info allOAuth2Info = getAllOAuth2Info();
 
         if (allOAuth2Info == null) {
-            // TODO: handle error
+            log.error("SpotifyOAuth2ServiceImpl :: refreshToken --> allOAuth2Info is null");
             throw new RuntimeException("SpotifyOAuth2ServiceImpl :: refreshToken --> allOAuth2Info is null");
         }
 

@@ -7,7 +7,13 @@ spring:
     compose:
       enabled: false
   cache:
-    caffeine:
-      spec: maximumSize=500,expireAfterAccess=600s
+    type: redis
   jpa:
     open-in-view: false
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      password: ${REDIS_PASS}
+      port: ${REDIS_PORT}
+      ssl:
+        enabled: true
