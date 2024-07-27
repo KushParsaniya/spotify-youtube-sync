@@ -1,6 +1,7 @@
 package dev.kush.spotifyyoutubesyncbackend.services.uri.impl;
 
 import dev.kush.spotifyyoutubesyncbackend.services.uri.UriParamExtractor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -9,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
+@Slf4j
 public class UriParamExtractorImpl implements UriParamExtractor {
 
     @Override
@@ -17,6 +19,7 @@ public class UriParamExtractorImpl implements UriParamExtractor {
         try {
             uri = new URI(link);
         } catch (URISyntaxException e) {
+            log.error("UriParamExtractorImpl :: extractPlayListIdFromPlaylistLink :: {}", e.getMessage());
             throw new RuntimeException(e);
         }
         String query = uri.getQuery();

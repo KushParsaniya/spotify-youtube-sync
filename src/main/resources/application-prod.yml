@@ -10,11 +10,10 @@ spring:
     type: redis
   jpa:
     open-in-view: false
-
   data:
     redis:
       host: ${REDIS_HOST}
-      username: ${REDIS_USER}
       password: ${REDIS_PASS}
       port: ${REDIS_PORT}
-      database: 0
+      ssl:
+        enabled: true

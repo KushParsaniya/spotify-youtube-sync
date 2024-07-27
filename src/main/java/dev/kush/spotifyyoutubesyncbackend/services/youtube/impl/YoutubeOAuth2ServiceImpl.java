@@ -17,6 +17,7 @@ import dev.kush.spotifyyoutubesyncbackend.services.uri.UriBuilderService;
 import dev.kush.spotifyyoutubesyncbackend.services.youtube.YoutubeOAuth2Service;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -32,6 +33,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class YoutubeOAuth2ServiceImpl implements YoutubeOAuth2Service {
 
     private final OAuth2Service oAuth2Service;
@@ -51,7 +53,7 @@ public class YoutubeOAuth2ServiceImpl implements YoutubeOAuth2Service {
         var allOAuth2Info = oAuth2Service.getAllInfoFromAppName(ProjectConstants.YOUTUBE_APP_NAME).getFirst();
 
         if (allOAuth2Info == null) {
-            // TODO: Handler Error
+            log.error("YoutubeOAuth2ServiceImpl :: getAccessToken --> allOAuth2Info is null");
             throw new RuntimeException("YoutubeOAuth2ServiceImpl :: getAccessToken --> allOAuth2Info is null");
         }
 
@@ -64,6 +66,7 @@ public class YoutubeOAuth2ServiceImpl implements YoutubeOAuth2Service {
             User user = getUserNameFromAccessToken(Objects.requireNonNull(responseEntity.getBody()));
 
             if (user == null) {
+                log.error("YoutubeOAuth2ServiceImpl :: getAccessToken --> user is null");
                 throw new RuntimeException("YoutubeOAuth2ServiceImpl :: getAccessToken --> user is null");
             }
 
@@ -184,7 +187,7 @@ public class YoutubeOAuth2ServiceImpl implements YoutubeOAuth2Service {
         AllOAuth2Info allOAuth2Info = getAllOAuth2Info();
 
         if (allOAuth2Info == null) {
-            // TODO: handle error
+            log.error("YoutubeOAuth2Service :: refreshToken --> allOAuth2Info is null");
             throw new RuntimeException("YoutubeOAuth2Service :: refreshToken --> allOAuth2Info is null");
         }
 
