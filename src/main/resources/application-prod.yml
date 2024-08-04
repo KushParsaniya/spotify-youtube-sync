@@ -15,10 +15,13 @@ spring:
   data:
     redis:
       host: ${REDIS_HOST}
+      username: ${REDIS_USER}
       password: ${REDIS_PASS}
       port: ${REDIS_PORT}
       ssl:
         enabled: true
+      repositories:
+        enabled: false
 
 # fro compression
 server:

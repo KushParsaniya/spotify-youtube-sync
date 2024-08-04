@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -27,6 +28,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@RedisHash("User")
 public class User implements Serializable {
 
     @Serial

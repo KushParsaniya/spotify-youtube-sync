@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@RedisHash("UserToken")
 public class UserToken implements Serializable {
 
     @Serial
