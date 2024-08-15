@@ -11,7 +11,7 @@
     </parent>
     <groupId>dev.kush</groupId>
     <artifactId>spotify-youtube-sync-backend</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>0.0.7-SNAPSHOT</version>
     <name>spotify-youtube-sync-backend</name>
     <description>spotify-youtube-sync-backend</description>
     <properties>
