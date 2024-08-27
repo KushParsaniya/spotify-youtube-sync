@@ -27,6 +27,16 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
+        env:
+          POSTGRES_HOST: ${{ env.POSTGRES_HOST }}
+          POSTGRES_NAME: ${{ env.POSTGRES_NAME }}
+          POSTGRES_PASS: ${{ env.POSTGRES_PASS }}
+          POSTGRES_PORT: ${{ env.POSTGRES_PORT }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          REDIS_HOST: ${{ env.REDIS_HOST }}
+          REDIS_USER: ${{ env.REDIS_USER }}
+          REDIS_PASS: ${{ env.REDIS_PASS }}
+          REDIS_PORT: ${{ env.REDIS_PORT }}
     - name: Build with Maven
       run: mvn clean install
 
