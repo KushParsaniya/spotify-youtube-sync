@@ -48,16 +48,6 @@ jobs:
 
     - name: build and push docker image to registry
       uses: docker/build-push-action@v5
-      env:
-        POSTGRES_HOST: ${{ vars.POSTGRES_HOST }}
-        POSTGRES_NAME: ${{ vars.POSTGRES_NAME }}
-        POSTGRES_PASS: ${{ vars.POSTGRES_PASS }}
-        POSTGRES_PORT: ${{ vars.POSTGRES_PORT }}
-        POSTGRES_USER: ${{ vars.POSTGRES_USER }}
-        REDIS_HOST: ${{ vars.REDIS_HOST }}
-        REDIS_USER: ${{ vars.REDIS_USER }}
-        REDIS_PASS: ${{ vars.REDIS_PASS }}
-        REDIS_PORT: ${{ vars.REDIS_PORT }}
       with:
         context: Dockerfile
         push: true
