@@ -95,6 +95,7 @@
     </dependencies>
 
     <build>
+        <finalName>spotify-youtube-sync-github-action</finalName>
         <plugins>
             <plugin>
                 <groupId>org.graalvm.buildtools</groupId>
