@@ -15,6 +15,7 @@ import dev.kush.spotifyyoutubesyncbackend.repos.UserTokenRepository;
 import dev.kush.spotifyyoutubesyncbackend.services.oauth2.OAuth2Service;
 import dev.kush.spotifyyoutubesyncbackend.services.uri.UriBuilderService;
 import dev.kush.spotifyyoutubesyncbackend.services.youtube.YoutubeOAuth2Service;
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -48,7 +50,10 @@ public class YoutubeOAuth2ServiceImpl implements YoutubeOAuth2Service {
 
     private final UriBuilderService uriBuilderService;
 
+    private final EntityManager entityManager;
+
     @Override
+    @Transactional
     public YoutubeUserDto getAccessToken(HttpServletRequest request, String authCode) {
         var allOAuth2Info = oAuth2Service.getAllInfoFromAppName(ProjectConstants.YOUTUBE_APP_NAME).getFirst();
 
@@ -172,7 +177,9 @@ public class YoutubeOAuth2ServiceImpl implements YoutubeOAuth2Service {
             userToken.setCreatedAt(DateUtils.getCurrentDateTime());
             userToken.setExpiryAt(DateUtils.getCurrentDateTime().plusSeconds(youtubeAccessTokenSuccessResponse.expiresIn()));
         }
-
+        if (!entityManager.contains(user)) {
+            user = entityManager.merge(user);
+        }
         user.setUserToken(List.of(userToken));
         return userTokenRepository.save(userToken);
     }
