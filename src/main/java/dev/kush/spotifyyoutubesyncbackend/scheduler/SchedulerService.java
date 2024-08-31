@@ -15,7 +15,7 @@ public class SchedulerService {
 
     private final CacheManager cacheManager;
 
-    @Scheduled(fixedRate = 150000)
+    @Scheduled(fixedRate = 3600000)
     public void clearAllCache() {
         cacheManager.getCacheNames().forEach(cacheName ->
                 Objects.requireNonNull(cacheManager.getCache(cacheName)).clear());
