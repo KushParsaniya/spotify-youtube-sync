@@ -22,6 +22,9 @@ spring:
         enabled: true
       repositories:
         enabled: false
+  threads:
+    virtual:
+      enabled: true
 
 # fro compression
 server:
