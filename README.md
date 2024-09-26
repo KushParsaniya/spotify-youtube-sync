@@ -27,13 +27,13 @@ This project is a Spring Boot application designed to synchronize a YouTube play
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your_username/your_project.git
+    git clone https://github.com/KushParsaniya/spotify-youtube-sync.git
     ```
 
 2. Navigate to the project directory:
 
     ```bash
-    cd your_project
+    cd spotify-youtube-sync
     ```
 
 3. Set up API credentials:
