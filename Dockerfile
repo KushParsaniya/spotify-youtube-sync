@@ -8,5 +8,5 @@ ADD target/spotify-youtube-sync-github-action.war spotify-youtube-sync-github-ac
 EXPOSE 8080
 
 # Run the WAR file using Tomcat
-ENTRYPOINT ["sh", "-c", "java -jar /spotify-youtube-sync-github-action.war --server.port=$PORT"]
+ENTRYPOINT ["sh", "-c", "java -jar /spotify-youtube-sync-github-action.war --server.port=8080"]
 
