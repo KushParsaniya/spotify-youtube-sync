@@ -28,6 +28,7 @@ spring:
 
 # fro compression
 server:
+  port: ${PORT:8080}
   compression:
     enabled: true
     mime-types: text/css,text/html,text/javascript,application/json
