@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,11 +18,10 @@ public class ViewController {
     private final UriBuilderService uriBuilderService;
 
     @GetMapping
-    public ModelAndView index(HttpServletRequest request, HttpSession session) {
+    public String index(HttpServletRequest request, HttpSession session, Model model) {
         session.removeAttribute("syncStatus");
-        ModelAndView mv = new ModelAndView(ProjectConstants.INDEX_VIEW_NAME);
-        mv.addObject("youtubeAuthUrl", uriBuilderService.getYoutubeUri(request));
-        mv.addObject("spotifyAuthUrl", uriBuilderService.getSpotifyUri(request));
-        return mv;
+        model.addAttribute("youtubeAuthUrl", uriBuilderService.getYoutubeUri(request));
+        model.addAttribute("spotifyAuthUrl", uriBuilderService.getSpotifyUri(request));
+        return ProjectConstants.INDEX_VIEW_NAME;
     }
 }
