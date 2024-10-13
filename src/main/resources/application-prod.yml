@@ -6,8 +6,6 @@ spring:
   docker:
     compose:
       enabled: false
-  jpa:
-    open-in-view: false
 
 # for redis cache and session
   cache:
