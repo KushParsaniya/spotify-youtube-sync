@@ -11,6 +11,7 @@ import dev.kush.spotifyyoutubesyncbackend.repos.UserTokenRepository;
 import dev.kush.spotifyyoutubesyncbackend.services.spotify.SpotifyOAuth2Service;
 import dev.kush.spotifyyoutubesyncbackend.services.spotify.SpotifyService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,6 +28,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SpotifyServiceImpl implements SpotifyService {
 
     private final RestTemplate restTemplate;
@@ -54,7 +56,7 @@ public class SpotifyServiceImpl implements SpotifyService {
 
     @Override
     public SpotifyCreatePlayListSuccess createPlayList(String spotifyUserId, CreatePlayListBody createPlayListBody) {
-
+        log.info("ShopifyService :: createPlayList :: Started");
         var userToken = getUserToken(spotifyUserId);
 
         if (userToken == null) {
@@ -69,6 +71,7 @@ public class SpotifyServiceImpl implements SpotifyService {
         ResponseEntity<SpotifyCreatePlayListSuccess> response = createPlayListRestCall(spotifyUserId, userToken, createPlayListBody);
 
         if (response.getStatusCode().is2xxSuccessful()) {
+            log.info("Spotify playlist created successfully");
             return response.getBody();
         }
         return null;
@@ -88,7 +91,7 @@ public class SpotifyServiceImpl implements SpotifyService {
 
     @Override
     public boolean addTracksToPlaylist(String spotifyUserId, SpotifyCreatePlayListSuccess spotifyCreatePlayListSuccess, AddTrackBody addTrackBody) {
-
+        log.info("SpotifyService :: addTracksToPlaylist :: Started");
         var userToken = getUserToken(spotifyUserId);
 
         if (userToken == null) {
@@ -103,6 +106,8 @@ public class SpotifyServiceImpl implements SpotifyService {
         HttpEntity<AddTrackBody> request = new HttpEntity<>(addTrackBody, headers);
 
         var response = restTemplate.postForEntity(uri, request, String.class);
+        log.info("addTracksToPlaylist response : {}", response.getBody());
+        log.info("SpotifyService :: addTracksToPlaylist :: Ended");
         return response.getStatusCode().is2xxSuccessful();
     }
 
@@ -120,7 +125,7 @@ public class SpotifyServiceImpl implements SpotifyService {
         var response = restTemplate.exchange(uri, HttpMethod.GET, request, SpotifySearchTrackBodySuccess.class);
 
         if (response.getStatusCode().is2xxSuccessful()) {
-            return Objects.requireNonNull(response.getBody()).tracks().spotifySearchTrackItems().get(0).trackId();
+            return Objects.requireNonNull(response.getBody()).tracks().spotifySearchTrackItems().getFirst().trackId();
         }
         return null;
     }

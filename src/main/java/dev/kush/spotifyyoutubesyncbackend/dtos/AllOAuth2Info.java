@@ -10,7 +10,7 @@ import dev.kush.spotifyyoutubesyncbackend.entities.Scope;
 import java.io.Serial;
 import java.io.Serializable;
 
-public record AllOAuth2Info (
+public record AllOAuth2Info(
         OAuth2Apps oAuth2Apps,
         Client client,
         RedirectUri redirectUri,

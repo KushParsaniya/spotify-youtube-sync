@@ -83,6 +83,8 @@ public class ProjectConstants {
     public static final String YOUTUBE_PARAMETER_MINE_NAME = "mine";
     public static final String YOUTUBE_PARAMETER_ID_NAME = "id";
     public static final String YOUTUBE_PARAMETER_PLAYLIST_ID_NAME = "playlistId";
+    public static final String YOUTUBE_PARAMETER_PAGE_TOKEN_NAME = "pageToken";
+
 
 
     //----------------- Youtube Parameter Values -------------------//
