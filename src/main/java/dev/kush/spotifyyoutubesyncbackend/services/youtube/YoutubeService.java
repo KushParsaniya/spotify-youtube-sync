@@ -16,7 +16,7 @@ public interface YoutubeService {
 
     List<YoutubeItemsDto> getPlaylistItems(String playlistId, String youtubeUserId);
 
-    ResponseEntity<YoutubeResponseDto> getPlaylistItemsRestCall(String playlistId, UserToken userToken);
+    YoutubeResponseDto getPlaylistItemsRestCall(String playlistId, UserToken userToken);
 
     List<String> getPlaylistTitles(List<YoutubeItemsDto> youtubeItemsDtos);
 
