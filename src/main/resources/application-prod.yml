@@ -7,7 +7,7 @@ spring:
     compose:
       enabled: false
 
-# for redis cache and session
+  # for redis cache and session
   cache:
     type: redis
   data:

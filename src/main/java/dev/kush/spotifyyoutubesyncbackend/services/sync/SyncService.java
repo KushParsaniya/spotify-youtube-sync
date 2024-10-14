@@ -1,7 +1,11 @@
 package dev.kush.spotifyyoutubesyncbackend.services.sync;
 
-public interface SyncService {
-    boolean syncYoutubePlayListToSpotify(String spotifyUserId, String youtubeUserId);
+import dev.kush.spotifyyoutubesyncbackend.dtos.sync.SyncResponseDto;
 
-    boolean syncYoutubePlayListToSpotifyByPlayListLink(String spotifyUserId, String youtubeUserId, String link);
+public interface SyncService {
+    SyncResponseDto syncYoutubePlayListToSpotify(String spotifyUserId, String youtubeUserId);
+
+    SyncResponseDto syncYoutubePlayListToSpotifyByPlayListLink(String spotifyUserId, String youtubeUserId, String link);
+
+//    boolean syncSpotifyPlayListToYoutubeByPlayListLink(String spotifyUserId, String youtubeUserId, String link);
 }

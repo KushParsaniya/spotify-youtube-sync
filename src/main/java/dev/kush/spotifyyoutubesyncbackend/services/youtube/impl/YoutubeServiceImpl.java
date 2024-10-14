@@ -70,7 +70,7 @@ public class YoutubeServiceImpl implements YoutubeService {
         ResponseEntity<YoutubeResponseDto> response = getPlaylistRestCall(url, userToken, youtubeUserId);
 
         if (response.getStatusCode().is2xxSuccessful()) {
-            return Objects.requireNonNull(response.getBody()).youtubeItemsDtos().get(0);
+            return Objects.requireNonNull(response.getBody()).youtubeItemsDtos().getFirst();
         }
         return null;
     }
@@ -96,7 +96,7 @@ public class YoutubeServiceImpl implements YoutubeService {
         ResponseEntity<YoutubeResponseDto> response = getPlaylistRestCall(url, userToken, youtubeUserId);
 
         if (response.getStatusCode().is2xxSuccessful()) {
-            return Objects.requireNonNull(response.getBody()).youtubeItemsDtos().get(0);
+            return Objects.requireNonNull(response.getBody()).youtubeItemsDtos().getFirst();
         }
         return null;
     }
@@ -117,26 +117,48 @@ public class YoutubeServiceImpl implements YoutubeService {
             return List.of();
         }
 
-        ResponseEntity<YoutubeResponseDto> response = getPlaylistItemsRestCall(playlistId, userToken);
+        YoutubeResponseDto response = getPlaylistItemsRestCall(playlistId, userToken);
 
-        if (response.getStatusCode().is2xxSuccessful()) {
-            return Objects.requireNonNull(response.getBody()).youtubeItemsDtos();
+        if (response != null) {
+            return response.youtubeItemsDtos();
         }
         return null;
     }
 
     @Override
-    public ResponseEntity<YoutubeResponseDto> getPlaylistItemsRestCall(String playlistId, UserToken userToken) {
-        final String url = ProjectConstants.YOUTUBE_BASE_URI + ProjectConstants.YOUTUBE_LIST_PLAYLIST_ITEMS_ENDPOINT
+    public YoutubeResponseDto getPlaylistItemsRestCall(String playlistId, UserToken userToken) {
+        String baseUrl = ProjectConstants.YOUTUBE_BASE_URI + ProjectConstants.YOUTUBE_LIST_PLAYLIST_ITEMS_ENDPOINT
                 + "?" + ProjectConstants.YOUTUBE_PARAMETER_PLAYLIST_ID_NAME + "=" + playlistId
-                + "&" + ProjectConstants.YOUTUBE_PARAMETER_PART_NAME + "=" + ProjectConstants.YOUTUBE_PART_SNIPPET_VALUE
-                + "," + ProjectConstants.YOUTUBE_PART_CONTENT_DETAILS_VALUE + "," + ProjectConstants.YOUTUBE_PART_ID_VALUE;
+                + "&" + ProjectConstants.YOUTUBE_PARAMETER_PART_NAME + "=" + String.join(",",
+                ProjectConstants.YOUTUBE_PART_SNIPPET_VALUE,
+                ProjectConstants.YOUTUBE_PART_CONTENT_DETAILS_VALUE,
+                ProjectConstants.YOUTUBE_PART_ID_VALUE);
 
         HttpHeaders headers = createHeaders(userToken);
-
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        return restTemplate.exchange(url, HttpMethod.GET, entity, YoutubeResponseDto.class);
+        YoutubeResponseDto youtubeResponseDto = null;
+        String nextPageToken = null;
+
+        do {
+            StringBuilder url = new StringBuilder(baseUrl);
+            if (nextPageToken != null) {
+                url.append("&").append(ProjectConstants.YOUTUBE_PARAMETER_PAGE_TOKEN_NAME).append("=").append(nextPageToken);
+            }
+            var response = restTemplate.exchange(url.toString(), HttpMethod.GET, entity, YoutubeResponseDto.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                YoutubeResponseDto body = response.getBody();
+                if (youtubeResponseDto == null) {
+                    youtubeResponseDto = body;
+                } else {
+                    youtubeResponseDto.youtubeItemsDtos().addAll(Objects.requireNonNull(body).youtubeItemsDtos());
+                }
+                nextPageToken = body != null ? body.nextPageToken() : null;
+            }
+
+        } while (nextPageToken != null);
+        return youtubeResponseDto;
     }
 
     @Override

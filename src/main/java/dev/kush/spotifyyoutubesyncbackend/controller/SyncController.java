@@ -1,5 +1,6 @@
 package dev.kush.spotifyyoutubesyncbackend.controller;
 
+import dev.kush.spotifyyoutubesyncbackend.dtos.ResponseDto;
 import dev.kush.spotifyyoutubesyncbackend.dtos.sync.SyncDto;
 import dev.kush.spotifyyoutubesyncbackend.services.sync.SyncService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class SyncController {
     private final SyncService syncService;
 
     @PostMapping
-    public boolean syncYoutubePlayListToSpotify(@RequestBody SyncDto syncDto) {
-        return syncService.syncYoutubePlayListToSpotify(syncDto.spotifyUserId(), syncDto.youtubeUserId());
+    public ResponseDto syncYoutubePlayListToSpotify(@RequestBody SyncDto syncDto) {
+        return new ResponseDto("Sync Successfully", syncService.syncYoutubePlayListToSpotify(syncDto.spotifyUserId(), syncDto.youtubeUserId()), 200);
     }
 }
