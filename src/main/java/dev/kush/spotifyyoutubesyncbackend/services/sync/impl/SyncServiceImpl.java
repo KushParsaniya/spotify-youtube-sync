@@ -3,6 +3,7 @@ package dev.kush.spotifyyoutubesyncbackend.services.sync.impl;
 import dev.kush.spotifyyoutubesyncbackend.dtos.spotify.AddTrackBody;
 import dev.kush.spotifyyoutubesyncbackend.dtos.spotify.CreatePlayListBody;
 import dev.kush.spotifyyoutubesyncbackend.dtos.spotify.SpotifyCreatePlayListSuccess;
+import dev.kush.spotifyyoutubesyncbackend.dtos.sync.SyncResponseDto;
 import dev.kush.spotifyyoutubesyncbackend.dtos.youtube.YoutubeItemsDto;
 import dev.kush.spotifyyoutubesyncbackend.services.spotify.SpotifyService;
 import dev.kush.spotifyyoutubesyncbackend.services.sync.SyncService;
@@ -21,33 +22,35 @@ public class SyncServiceImpl implements SyncService {
     private final YoutubeService youtubeService;
 
     @Override
-    public boolean syncYoutubePlayListToSpotify(String spotifyUserId, String youtubeUserId) {
+    public SyncResponseDto syncYoutubePlayListToSpotify(String spotifyUserId, String youtubeUserId) {
         YoutubeItemsDto youtubePlaylist = youtubeService.getPlaylist(youtubeUserId);
         List<YoutubeItemsDto> playlistItems = getPlaylistItems(youtubePlaylist, youtubeUserId);
 
         if (playlistItems.isEmpty()) {
-            return false;
+            return new SyncResponseDto(true, 0, 0);
         }
 
         SpotifyCreatePlayListSuccess spotifyPlaylist = createSpotifyPlaylist(spotifyUserId, youtubePlaylist);
         Set<String> spotifyTrackIds = getSpotifyTrackIds(spotifyUserId, playlistItems);
 
-        return spotifyService.addTracksToPlaylist(spotifyUserId, spotifyPlaylist, new AddTrackBody(spotifyTrackIds, 0));
+        var status = spotifyService.addTracksToPlaylist(spotifyUserId, spotifyPlaylist, new AddTrackBody(spotifyTrackIds, 0));
+        return new SyncResponseDto(status, playlistItems.size(), spotifyTrackIds.size());
     }
 
     @Override
-    public boolean syncYoutubePlayListToSpotifyByPlayListLink(String spotifyUserId, String youtubeUserId, String link) {
+    public SyncResponseDto syncYoutubePlayListToSpotifyByPlayListLink(String spotifyUserId, String youtubeUserId, String link) {
         YoutubeItemsDto youtubePlaylist = youtubeService.getPlaylistByPlaylistLink(youtubeUserId, link);
         List<YoutubeItemsDto> playlistItems = getPlaylistItems(youtubePlaylist, youtubeUserId);
 
         if (playlistItems.isEmpty()) {
-            return false;
+            return new SyncResponseDto(true, 0, 0);
         }
 
         SpotifyCreatePlayListSuccess spotifyPlaylist = createSpotifyPlaylist(spotifyUserId, youtubePlaylist);
         Set<String> spotifyTrackIds = getSpotifyTrackIds(spotifyUserId, playlistItems);
 
-        return spotifyService.addTracksToPlaylist(spotifyUserId, spotifyPlaylist, new AddTrackBody(spotifyTrackIds, 0));
+        var status = spotifyService.addTracksToPlaylist(spotifyUserId, spotifyPlaylist, new AddTrackBody(spotifyTrackIds, 0));
+        return new SyncResponseDto(status, playlistItems.size(), spotifyTrackIds.size());
     }
 
     private List<YoutubeItemsDto> getPlaylistItems(YoutubeItemsDto youtubePlaylist, String youtubeUserId) {

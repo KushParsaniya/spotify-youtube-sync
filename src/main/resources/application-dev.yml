@@ -3,8 +3,8 @@ spring:
     show-sql: true
 
   cache:
-#    caffeine:
-#      spec: maximumSize=500,expireAfterAccess=600s
+    #    caffeine:
+    #      spec: maximumSize=500,expireAfterAccess=600s
     type: redis
   data:
     redis:

@@ -18,7 +18,7 @@ public class ViewController {
 
     @GetMapping
     public ModelAndView index(HttpServletRequest request, HttpSession session) {
-        session.removeAttribute("syncStatus");
+        session.removeAttribute("syncResponseDto");
         ModelAndView mv = new ModelAndView(ProjectConstants.INDEX_VIEW_NAME);
         mv.addObject("youtubeAuthUrl", uriBuilderService.getYoutubeUri(request));
         mv.addObject("spotifyAuthUrl", uriBuilderService.getSpotifyUri(request));

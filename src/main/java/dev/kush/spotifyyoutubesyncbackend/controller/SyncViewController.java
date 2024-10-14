@@ -1,6 +1,7 @@
 package dev.kush.spotifyyoutubesyncbackend.controller;
 
 import dev.kush.spotifyyoutubesyncbackend.dtos.sync.SyncDto;
+import dev.kush.spotifyyoutubesyncbackend.dtos.sync.SyncResponseDto;
 import dev.kush.spotifyyoutubesyncbackend.services.sync.SyncService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -17,15 +18,15 @@ public class SyncViewController {
 
     @PostMapping("/")
     public String syncYoutubePlayListToSpotify(HttpSession session, SyncDto syncDto) {
-        boolean status = false;
+        SyncResponseDto syncResponseDto = null;
         if (syncDto.link() == null || syncDto.link().isBlank()) {
-            status = syncService.syncYoutubePlayListToSpotify(syncDto.spotifyUserId(), syncDto.youtubeUserId());
-            session.setAttribute("syncStatus", status);
-
+            syncResponseDto= syncService.syncYoutubePlayListToSpotify(syncDto.spotifyUserId(), syncDto.youtubeUserId());
+            session.setAttribute("syncResponseDto", syncResponseDto);
         } else {
-            status = syncService.syncYoutubePlayListToSpotifyByPlayListLink(syncDto.spotifyUserId(), syncDto.youtubeUserId(), syncDto.link());
-            session.setAttribute("syncStatus", status);
+            syncResponseDto = syncService.syncYoutubePlayListToSpotifyByPlayListLink(syncDto.spotifyUserId(), syncDto.youtubeUserId(), syncDto.link());
+            session.setAttribute("syncResponseDto", syncResponseDto);
         }
+        System.out.println(syncResponseDto);
         return "redirect:/";
     }
 }
