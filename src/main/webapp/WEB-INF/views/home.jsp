@@ -163,6 +163,11 @@
 <script>
     function closeToast() {
         document.getElementById('toast').style.display = 'none';
+        removeAttributes()
+    }
+
+    function removeAttributes() {
+        fetch('sync/removeSyncResponseDto', { method: 'POST' });
     }
 
     document.addEventListener('DOMContentLoaded', (event) => {
@@ -184,6 +189,7 @@
             setTimeout(() => {
                 toast.style.display = 'none';
             }, 5000);
+            setTimeout(removeAttributes, 5000);
         }
 
         // If sync is complete, hide the animation
@@ -193,7 +199,6 @@
             syncIcon.classList.remove('animate-spin');
         }
 
-        fetch('/removeSyncResponseDto', { method: 'POST' });
     });
 </script>
 </body>
