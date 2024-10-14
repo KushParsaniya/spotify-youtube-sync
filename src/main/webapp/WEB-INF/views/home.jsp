@@ -133,6 +133,7 @@
             return new bootstrap.Toast(toastEl, { autohide: true, delay: 3000 })
         });
         toastList.forEach(toast => toast.show());
+        fetch('/removeSyncResponseDto', { method: 'POST' });
     });
 </script>
 

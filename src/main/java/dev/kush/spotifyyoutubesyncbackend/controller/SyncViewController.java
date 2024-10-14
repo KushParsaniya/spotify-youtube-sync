@@ -20,7 +20,7 @@ public class SyncViewController {
     public String syncYoutubePlayListToSpotify(HttpSession session, SyncDto syncDto) {
         SyncResponseDto syncResponseDto = null;
         if (syncDto.link() == null || syncDto.link().isBlank()) {
-            syncResponseDto= syncService.syncYoutubePlayListToSpotify(syncDto.spotifyUserId(), syncDto.youtubeUserId());
+            syncResponseDto = syncService.syncYoutubePlayListToSpotify(syncDto.spotifyUserId(), syncDto.youtubeUserId());
             session.setAttribute("syncResponseDto", syncResponseDto);
         } else {
             syncResponseDto = syncService.syncYoutubePlayListToSpotifyByPlayListLink(syncDto.spotifyUserId(), syncDto.youtubeUserId(), syncDto.link());
@@ -28,5 +28,10 @@ public class SyncViewController {
         }
         System.out.println(syncResponseDto);
         return "redirect:/";
+    }
+
+    @PostMapping("/removeSyncResponseDto")
+    public void removeSyncResponseDto(HttpSession session) {
+        session.removeAttribute("syncResponseDto");
     }
 }
