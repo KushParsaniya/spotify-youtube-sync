@@ -1,0 +1,1 @@
+web: java -Dserver.port=$PORT -jar target/spotify-youtube-sync-github-action.war
