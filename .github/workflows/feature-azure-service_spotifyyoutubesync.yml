@@ -38,7 +38,7 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: java-app
+          name: spotify-youtube-sync-github-action
           path: '${{ github.workspace }}/target/*.jar'
 
   deploy:
