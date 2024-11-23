@@ -29,3 +29,15 @@ server:
   compression:
     enabled: true
     mime-types: text/css,text/html,text/javascript,application/json
+
+management:
+  datadog:
+    metrics:
+      export:
+        api-key: ${DATADOG_API_KEY}
+        application-key: ${DATADOG_APP_KEY}
+        uri: ${DATADOG_URI}
+  endpoints:
+    web:
+      exposure:
+        include: cache,health,info,metrics,sessions
