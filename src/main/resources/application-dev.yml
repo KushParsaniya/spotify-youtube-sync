@@ -10,3 +10,8 @@ spring:
     redis:
       repositories:
         enabled: false
+management:
+  datadog:
+    metrics:
+      export:
+        enabled: false
