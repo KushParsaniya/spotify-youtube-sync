@@ -40,4 +40,14 @@ management:
   endpoints:
     web:
       exposure:
-        include: cache,health,info,metrics,sessions
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+  tracing:
+    sampling:
+      probability: 0.5
+  zipkin:
+    tracing:
+      endpoint: http://${ZIPKIN_HOST}:${ZIPKIN_PORT}/api/v2/spans
+

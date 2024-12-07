@@ -21,10 +21,10 @@ public class WebSecurityConfig {
                         req -> req
                                 .requestMatchers("/cache/**").hasRole("ADMIN")
                                 .requestMatchers("/actuator/**").hasRole("ADMIN")
-                                .requestMatchers("/spotify/**", "/youtube/**",
-                                        "sync/**", "/api/v1/sync/**", "/").permitAll()
-                                .requestMatchers("/WEB-INF/views/*.jsp").permitAll()
-                                .anyRequest().authenticated()
+//                                .requestMatchers("/spotify/**", "/youtube/**",
+//                                        "sync/**", "/api/v1/sync/**", "/").permitAll()
+//                                .requestMatchers("/WEB-INF/views/*.jsp").permitAll()
+                                .anyRequest().permitAll()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(Customizer.withDefaults())
