@@ -10,6 +10,9 @@ spring:
     redis:
       repositories:
         enabled: false
+  cloud:
+    config:
+      enabled: false
 management:
   datadog:
     metrics:
