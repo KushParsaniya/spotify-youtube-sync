@@ -55,7 +55,7 @@ public class YoutubeOAuth2ServiceImpl implements YoutubeOAuth2Service {
     @Override
     @Transactional
     public YoutubeUserDto getAccessToken(HttpServletRequest request, String authCode) {
-        var allOAuth2Info = oAuth2Service.getAllInfoFromAppName(ProjectConstants.YOUTUBE_APP_NAME).getFirst();
+        var allOAuth2Info = oAuth2Service.getAllInfoFromAppName(ProjectConstants.YOUTUBE_APP_NAME).get(0);
 
         if (allOAuth2Info == null) {
             log.error("YoutubeOAuth2ServiceImpl :: getAccessToken --> allOAuth2Info is null");
@@ -208,7 +208,7 @@ public class YoutubeOAuth2ServiceImpl implements YoutubeOAuth2Service {
     }
 
     private AllOAuth2Info getAllOAuth2Info() {
-        return oAuth2Service.getAllInfoFromAppName(ProjectConstants.YOUTUBE_APP_NAME).getFirst();
+        return oAuth2Service.getAllInfoFromAppName(ProjectConstants.YOUTUBE_APP_NAME).get(0);
     }
 
     @Override
